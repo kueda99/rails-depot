@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 class ProductTest < ActiveSupport::TestCase
@@ -40,14 +41,21 @@ class ProductTest < ActiveSupport::TestCase
   test "image_url without a proper extension invalid" do
     good = %w{hello.gif hello.GIF hello.jpg hello.JPG hello.png hello.PNG}
     good.each do |url|
-      @product.image_url = url
-      assert @product.valid?, %{URL with a proper extension ('#{url}') should be valid}
+      assert new_product(url).valid?, %{URL with a proper extension ('#{url}') should be valid}
     end
 
     bad_url = ['hello.pdf']
     bad_url.each do |url|
-      @product.image_url = url
-      assert @product.invalid?, %{URL with an improper extension ('#{url}') should not be valid}
+      assert new_product(url).invalid?, %{URL with an improper extension ('#{url}') should not be valid}
     end
+  end
+
+
+  # 新しい product オブジェクトを生成する。
+  def new_product(image_url)
+    Product.new(:title => "My Book Title",
+                :description => "yyy",
+                :price => 1,
+                :image_url => image_url)
   end
 end
