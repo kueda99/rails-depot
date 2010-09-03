@@ -35,4 +35,18 @@ class ProductTest < ActiveSupport::TestCase
     new_product = Product.new(@product.attributes)
     assert new_product.invalid?, "product with duplicate title should be invalid"
   end
+
+  test "image_url without a proper extension invalid" do
+    good_url = ['hello.gif', 'hello.GIF', 'hello.jpg', 'hello.JPG', 'hello.png', 'hello.PNG']
+    good_url.each do |url|
+      @product.image_url = url
+      assert @product.valid?, %{URL with a proper extension ('#{url}') should be valid}
+    end
+
+    bad_url = ['hello.pdf']
+    bad_url.each do |url|
+      @product.image_url = url
+      assert @product.invalid?, %{URL with an improper extension ('#{url}') should not be valid}
+    end
+  end
 end
