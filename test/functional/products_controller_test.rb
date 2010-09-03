@@ -17,8 +17,12 @@ class ProductsControllerTest < ActionController::TestCase
   end
 
   test "should create product" do
+    attributes = @product.attributes
+    puts attributes
+    attributes.update({"title" => attributes["title"] + "2"})
+
     assert_difference('Product.count') do
-      post :create, :product => @product.attributes
+      post :create, :product => attributes
     end
 
     assert_redirected_to product_path(assigns(:product))
