@@ -23,10 +23,11 @@ class ProductTest < ActiveSupport::TestCase
     @product.price = 10.0
     assert @product.valid?, "product price greater than 0 should be valid"
 
-    NG = [0.0, -1.0]
-    NG.each do |price|
+    bad = %w{0.0 -1.0}
+    bad.each do |price|
       @product.price = price
       assert @product.invalid?, "product price should be invalid if it is #{price}"
+      assert_equal "must be greater than or equal to 0.01", @product.errors[:price].join('; ')
     end
   end
 
@@ -37,8 +38,8 @@ class ProductTest < ActiveSupport::TestCase
   end
 
   test "image_url without a proper extension invalid" do
-    good_url = ['hello.gif', 'hello.GIF', 'hello.jpg', 'hello.JPG', 'hello.png', 'hello.PNG']
-    good_url.each do |url|
+    good = %w{hello.gif hello.GIF hello.jpg hello.JPG hello.png hello.PNG}
+    good.each do |url|
       @product.image_url = url
       assert @product.valid?, %{URL with a proper extension ('#{url}') should be valid}
     end
