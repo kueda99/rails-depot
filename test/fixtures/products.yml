@@ -3,11 +3,11 @@
 one:
   title: "MyString one"
   description: MyText
-  image_url: MyString
+  image_url: MyString.jpg
   price: 9.99
 
 two:
   title: "MyString two"
   description: MyText
-  image_url: MyString
+  image_url: MyString.jpg
   price: 9.99
