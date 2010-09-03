@@ -18,7 +18,6 @@ class ProductsControllerTest < ActionController::TestCase
 
   test "should create product" do
     attributes = @product.attributes
-    puts attributes
     attributes.update({"title" => attributes["title"] + "2"})
 
     assert_difference('Product.count') do
