@@ -49,4 +49,21 @@ class ProductsControllerTest < ActionController::TestCase
 
     assert_redirected_to products_path
   end
+
+  test "should get index having proper layout" do
+    get :index
+    assert_select %{title}, 'Pragprog Books Online Store'
+    assert_select '#store' do |elements|
+      elements.each do |element|
+        assert_select element, '#banner'
+        assert_select element, '#columns' do |elems|
+          elems.each do |el|
+            assert_select el, '#side'
+            assert_select el, '#main'
+          end
+        end
+      end
+    end
+  end
+
 end
