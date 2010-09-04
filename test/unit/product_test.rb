@@ -50,6 +50,17 @@ class ProductTest < ActiveSupport::TestCase
     end
   end
 
+  # Product.find が title についてソートされて得られるかのテスト
+  test "product objects should be obtained in order of title value" do
+    # まずはフィクスチャーがタイトル順に得られないことを確認する
+    products = Product.unscoped.all
+    sorted_products = products.sort_by { |item| item.title }
+    assert_not_equal products, sorted_products,
+        "Fixture is not in a good condition for this test"
+
+    assert_equal sorted_products, Product.all
+  end
+
 
   # 新しい product オブジェクトを生成する。
   def new_product(image_url)
