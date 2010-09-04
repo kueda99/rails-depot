@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 class ProductsControllerTest < ActionController::TestCase
@@ -51,19 +52,20 @@ class ProductsControllerTest < ActionController::TestCase
   end
 
   test "should get index having proper layout" do
-    get :index
-    assert_select %{title}, 'Pragprog Books Online Store'
-    assert_select '#store' do |elements|
-      elements.each do |element|
-        assert_select element, '#banner'
-        assert_select element, '#columns' do |elems|
-          elems.each do |el|
-            assert_select el, '#side'
-            assert_select el, '#main'
-          end
-        end
-      end
+    get_args = [[:index], [:new],
+                [:show, {:id => @product.to_param}],
+                [:edit, {:id => @product.to_param}]]
+
+    get_args.each do |args|
+      get *args
+      assert_application_layout
     end
+
+    # post, put, delete を実行したときにレイアウトが表示されるテストは
+    # 行う意味がない。すなわち、これらを実行したときは /products または
+    # /products/:id にリダイレクトされることを上記テストで確認している
+    # ので、:index および :show にてレイアウトが表示されることを確認す
+    # るだけで十分である。
   end
 
 end
