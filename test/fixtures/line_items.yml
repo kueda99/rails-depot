@@ -1,11 +1,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  cart_id: 1
-  product_id: 1
+li_one:
+  cart: cart_with_two_items
+  product: one
   quantity: 1
 
-two:
-  cart_id: 1
-  product_id: 1
+li_two:
+  cart: cart_with_two_items
+  product: ruby
   quantity: 1

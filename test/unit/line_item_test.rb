@@ -1,8 +1,8 @@
 require 'test_helper'
 
 class LineItemTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  test "the truth" do
-    assert true
+  test "should have methods returning relations" do
+    assert LineItem.method_defined?('cart')
+    assert LineItem.method_defined?('product')
   end
 end

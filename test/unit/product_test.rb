@@ -61,6 +61,10 @@ class ProductTest < ActiveSupport::TestCase
     assert_equal sorted_products, Product.all
   end
 
+  # 関連のメソッドが存在しているかテスト
+  test "should have methods returning relations" do
+    assert Product.method_defined?('line_items')
+  end
 
   # 新しい product オブジェクトを生成する。
   def new_product(image_url)
