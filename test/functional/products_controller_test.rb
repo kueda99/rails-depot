@@ -68,4 +68,9 @@ class ProductsControllerTest < ActionController::TestCase
     # るだけで十分である。
   end
 
+  test "should show price with denomination" do
+    get :show, :id => @product.to_param
+    assert_select '.price', /\$[,\d]+\.\d\d/
+  end
+
 end

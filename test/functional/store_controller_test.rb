@@ -23,4 +23,10 @@ class StoreControllerTest < ActionController::TestCase
     get :index
     assert_application_layout
   end
+
+  test "should show price with denomination" do
+    get :index
+    assert_select '.price', /\$[,\d]+\.\d\d/
+  end
+
 end
