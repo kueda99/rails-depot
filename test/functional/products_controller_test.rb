@@ -4,6 +4,7 @@ require 'test_helper'
 class ProductsControllerTest < ActionController::TestCase
   setup do
     @product = products(:one)
+    @product_not_in_any_cart = products(:not_in_any_cart)
   end
 
   test "should get index" do
@@ -43,8 +44,16 @@ class ProductsControllerTest < ActionController::TestCase
     assert_redirected_to product_path(assigns(:product))
   end
 
-  test "should destroy product" do
+  test "should destroy product which is not associated with any line items" do
     assert_difference('Product.count', -1) do
+      delete :destroy, :id => @product_not_in_any_cart.to_param
+    end
+
+    assert_redirected_to products_path
+  end
+
+  test "should not destroy product which is associated with any line items" do
+    assert_no_difference('Product.count') do
       delete :destroy, :id => @product.to_param
     end
 
