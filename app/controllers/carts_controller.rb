@@ -14,6 +14,7 @@ class CartsController < ApplicationController
   # GET /carts/1.xml
   def show
     @cart = Cart.find(params[:id])
+    @line_items = @cart.line_items
 
     respond_to do |format|
       format.html # show.html.erb
