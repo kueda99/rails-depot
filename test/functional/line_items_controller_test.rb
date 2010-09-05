@@ -10,6 +10,7 @@ class LineItemsControllerTest < ActionController::TestCase
     session[:cart_id] = @cart.id
   end
 
+  # ページ取得する段階でカートが存在していることの確認
   test "cart_id should exist in 'session' hash" do
     get :index
     assert_not_nil session[:cart_id]
@@ -28,15 +29,23 @@ class LineItemsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  # ラインアイテムを新規に作成した場合、自動的にカートに入ることの確認
   test "should create line_item" do
+    item_count = @cart.line_items.count
+
     assert_difference('LineItem.count') do
       post :create, :line_item => @new_line_item.attributes
     end
 
-    # ちゃんとカートの中に入ったか
-    assert_equal @cart.id, @new_line_item.cart.id
+    # ちゃんとカートの中に入ったかの確認
+    assert_equal item_count + 1, @cart.line_items.count
     assert_redirected_to line_item_path(assigns(:line_item))
   end
+
+
+  # ラインアイテムについて :show した場合、もし自分のカートに入っている
+  # 場合は情報を表示する。そうでないときは「そんなもの存在していない」
+  # ように取り扱われる
 
   test "should show line_item" do
     get :show, :id => @line_item.to_param
@@ -51,6 +60,11 @@ class LineItemsControllerTest < ActionController::TestCase
     end
   end
 
+
+  # ラインアイテムについて :edit した場合、もし自分のカートに入っている
+  # 場合は情報を表示する。そうでないときは「そんなもの存在していない」
+  # ように取り扱われる
+
   test "should get edit" do
     get :edit, :id => @line_item.to_param
     assert_response :success
@@ -64,14 +78,27 @@ class LineItemsControllerTest < ActionController::TestCase
     end
   end
 
+
+  # ラインアイテムについて :update した場合、もし自分のカートに入ってい
+  # る場合は情報を表示する。そうでないときは「そんなもの存在していない」
+  # ように取り扱われる
+
   test "should update line_item" do
     put :update, :id => @line_item.to_param, :line_item => @line_item.attributes
     assert_redirected_to line_item_path(assigns(:line_item))
   end
 
   test "should not update line_item in another cart" do
-    flunk(message="Test not implemented")
+    assert_raise(ActiveRecord::RecordNotFound) do
+      put :update, :id => @line_item_in_another_cart.to_param,
+        :line_item => @line_item_in_another_cart.attributes
+    end
   end
+
+
+  # ラインアイテムについて :destroy した場合、もし自分のカートに入って
+  # いる場合は情報を表示する。そうでないときは「そんなもの存在していな
+  # い」ように取り扱われる
 
   test "should destroy line_item" do
     assert_difference('LineItem.count', -1) do
@@ -82,7 +109,9 @@ class LineItemsControllerTest < ActionController::TestCase
   end
 
   test "should not destroy line_item in another cart" do
-    flunk(message="Test not implemented")
+    assert_raise(ActiveRecord::RecordNotFound) do
+      delete :destroy, :id => @line_item_in_another_cart.to_param
+    end
   end
 
 end
