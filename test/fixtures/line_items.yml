@@ -10,10 +10,6 @@ li_two:
   product: two
   quantity: 1
 
-li_not_in_a_cart:
-  product: ruby
-  quantity: 1
-
 li_in_another_cart:
   cart: another_cart
   product: ruby

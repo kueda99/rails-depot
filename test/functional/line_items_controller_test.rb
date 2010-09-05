@@ -4,13 +4,12 @@ require 'test_helper'
 class LineItemsControllerTest < ActionController::TestCase
   setup do
     @line_item = line_items(:li_one)
-    @new_line_item = line_items(:li_not_in_a_cart)
     @line_item_in_another_cart = line_items(:li_in_another_cart)
     @cart = carts(:cart_with_two_items)
     session[:cart_id] = @cart.id
   end
 
-  # ページ取得する段階でカートが存在していることの確認
+  # カートの中に 2 つの製品が入っていることの確認 (フィクスチャーのチェック)
   test "cart_id should exist in 'session' hash" do
     get :index
     assert_not_nil session[:cart_id]
@@ -31,15 +30,17 @@ class LineItemsControllerTest < ActionController::TestCase
 
   # ラインアイテムを新規に作成した場合、自動的にカートに入ることの確認
   test "should create line_item" do
-    item_count = @cart.line_items.count
+    cart_items_count = @cart.line_items.count
+    product_items_count = products(:ruby).line_items.count
 
     assert_difference('LineItem.count') do
-      post :create, :line_item => @new_line_item.attributes
+      post :create, :product_id => products(:ruby).id
     end
 
     # ちゃんとカートの中に入ったかの確認
-    assert_equal item_count + 1, @cart.line_items.count
-    assert_redirected_to line_item_path(assigns(:line_item))
+    assert_equal cart_items_count + 1, @cart.line_items.count
+    assert_equal product_items_count + 1, products(:ruby).line_items.count
+    assert_redirected_to cart_path(@cart)
   end
 
 
