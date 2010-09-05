@@ -13,8 +13,8 @@ class LineItemsController < ApplicationController
   # GET /line_items/1
   # GET /line_items/1.xml
   def show
-    @line_item = LineItem.find(params[:id], :conditions => ['cart_id = ?', current_cart.id])
-
+    @cart = current_cart
+    @line_item = @cart.line_items.find(params[:id])
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @line_item }
@@ -34,7 +34,8 @@ class LineItemsController < ApplicationController
 
   # GET /line_items/1/edit
   def edit
-    @line_item = LineItem.find(params[:id], :conditions => ['cart_id = ?', current_cart.id])
+    @cart = current_cart
+    @line_item = @cart.line_items.find(params[:id])
   end
 
   # POST /line_items
@@ -74,11 +75,12 @@ class LineItemsController < ApplicationController
   # DELETE /line_items/1
   # DELETE /line_items/1.xml
   def destroy
-    @line_item = LineItem.find(params[:id], :conditions => ['cart_id = ?', current_cart.id])
+    @cart = current_cart
+    @line_item = @cart.line_items.find(params[:id])
     @line_item.destroy
 
     respond_to do |format|
-      format.html { redirect_to(cart_url(current_cart)) }
+      format.html { redirect_to(cart_url(@cart)) }
       format.xml  { head :ok }
     end
   end
