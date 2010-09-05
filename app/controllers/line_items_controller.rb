@@ -2,7 +2,7 @@ class LineItemsController < ApplicationController
   # GET /line_items
   # GET /line_items.xml
   def index
-    @line_items = LineItem.all
+    @line_items = current_cart.line_items
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,7 +13,7 @@ class LineItemsController < ApplicationController
   # GET /line_items/1
   # GET /line_items/1.xml
   def show
-    @line_item = LineItem.find(params[:id])
+    @line_item = LineItem.find(params[:id], :conditions => ['cart_id = ?', current_cart.id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -34,13 +34,14 @@ class LineItemsController < ApplicationController
 
   # GET /line_items/1/edit
   def edit
-    @line_item = LineItem.find(params[:id])
+    @line_item = LineItem.find(params[:id], :conditions => ['cart_id = ?', current_cart.id])
   end
 
   # POST /line_items
   # POST /line_items.xml
   def create
     @line_item = LineItem.new(params[:line_item])
+    @line_item.cart = current_cart
 
     respond_to do |format|
       if @line_item.save
@@ -56,7 +57,7 @@ class LineItemsController < ApplicationController
   # PUT /line_items/1
   # PUT /line_items/1.xml
   def update
-    @line_item = LineItem.find(params[:id])
+    @line_item = LineItem.find(params[:id], :conditions => ['cart_id = ?', current_cart.id])
 
     respond_to do |format|
       if @line_item.update_attributes(params[:line_item])
@@ -72,7 +73,7 @@ class LineItemsController < ApplicationController
   # DELETE /line_items/1
   # DELETE /line_items/1.xml
   def destroy
-    @line_item = LineItem.find(params[:id])
+    @line_item = LineItem.find(params[:id], :conditions => ['cart_id = ?', current_cart.id])
     @line_item.destroy
 
     respond_to do |format|
