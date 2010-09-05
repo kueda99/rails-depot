@@ -7,5 +7,14 @@ li_one:
 
 li_two:
   cart: cart_with_two_items
+  product: two
+  quantity: 1
+
+li_not_in_a_cart:
+  product: ruby
+  quantity: 1
+
+li_in_another_cart:
+  cart: another_cart
   product: ruby
   quantity: 1

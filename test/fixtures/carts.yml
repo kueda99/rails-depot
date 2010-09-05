@@ -9,3 +9,6 @@ cart_without_item: {}
 #
 cart_with_two_items: {}
 #  column: value
+
+another_cart: {}
+#  column: value
