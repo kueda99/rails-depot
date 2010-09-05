@@ -102,11 +102,14 @@ class LineItemsControllerTest < ActionController::TestCase
   # い」ように取り扱われる
 
   test "should destroy line_item" do
+    cart_id = @line_item.cart
     assert_difference('LineItem.count', -1) do
       delete :destroy, :id => @line_item.to_param
     end
 
-    assert_redirected_to line_items_path
+    # LineItem インスタンス削除で 'GET /carts/:id' (show アクション) へ
+    # リダイレクトされる (そこでは LineItem の一覧が表示される)。
+    assert_redirected_to cart_path(cart_id)
   end
 
   test "should not destroy line_item in another cart" do
