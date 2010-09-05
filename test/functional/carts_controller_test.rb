@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 class CartsControllerTest < ActionController::TestCase
@@ -27,6 +28,8 @@ class CartsControllerTest < ActionController::TestCase
   test "should show cart" do
     get :show, :id => @cart.to_param
     assert_response :success
+    # カートに入っているラインアイテムの個数 + ヘッダ
+    assert_select 'table > tr', @cart.line_items.count + 1
   end
 
   test "should get edit" do
