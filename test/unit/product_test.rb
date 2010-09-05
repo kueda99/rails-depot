@@ -4,6 +4,7 @@ require 'test_helper'
 class ProductTest < ActiveSupport::TestCase
   setup do
     @product = products(:one)
+    @product_not_in_any_cart = products(:not_in_any_cart)
   end
 
   test "test conditions are established" do
@@ -65,6 +66,28 @@ class ProductTest < ActiveSupport::TestCase
   test "should have methods returning relations" do
     assert Product.method_defined?('line_items')
   end
+
+
+  # 少なくても 1 つ以上のラインアイテムが参照している (製品がカートに入っ
+  # ている) ときは削除することができないことのテスト
+  test "should not be deleted if it has at least one associated line item" do
+    assert !@product.line_items.empty?, "Fixture is not good for this test"
+    assert_no_difference 'Product.count' do
+      @product.destroy
+    end
+    assert @product.errors[:base].include? "Line items present"
+  end
+
+  # ラインアイテムが参照していない (製品がカートに入っていない) ときは
+  # 削除することができることのテスト
+  test "could be deleted if it does not have any associated line items" do
+    assert @product_not_in_any_cart.line_items.empty?, "Fixture is not good for this test"
+    assert_difference 'Product.count', -1 do
+      @product_not_in_any_cart.destroy
+    end
+    assert !@product_not_in_any_cart.errors[:base].include?("Line items present")
+  end
+
 
   # 新しい product オブジェクトを生成する。
   def new_product(image_url)

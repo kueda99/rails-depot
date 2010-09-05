@@ -11,7 +11,6 @@ two:
   description: MyText
   image_url: MyString.jpg
   price: 9.99
-#START:ruby
 
 ruby:
   title:       Programming Ruby 1.9
@@ -21,4 +20,11 @@ ruby:
     delivered fast, you should add Ruby to your toolbox.
   price:       49.50
   image_url:   ruby.png
-#END:ruby
+
+# カートに入っていない本
+not_in_any_cart:
+  title: BTC 社史
+  description:
+    BTC 創業から現在に至るまでの歴史を紹介する。
+  price: 0.99
+  image_url: btc.png
