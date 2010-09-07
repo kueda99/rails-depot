@@ -13,8 +13,9 @@
 <% @line_items.each do |item| %>
   <tr>
     <td class="line_item_title"><%= item.product.title %></td>
-    <td class="line_item_quantity"><%= item.quantity %></td>
-    <td class="line_item_subtotal"><%= number_to_currency(item.quantity * item.product.price) %></td>
+    <td class="line_item_quantity"><%= item.quantity || 'N/A' %></td>
+    <td class="line_item_subtotal">
+      <%= item.quantity.nil? ? 'N/A' : number_to_currency(item.quantity * item.product.price) %></td>
     <td><%= link_to 'Edit', edit_line_item_path(item) %></td>
     <td><%= link_to 'Destroy', item, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>

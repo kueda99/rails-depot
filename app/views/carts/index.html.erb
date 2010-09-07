@@ -2,6 +2,8 @@
 
 <table>
   <tr>
+    <th>ID</th>
+    <th>Line Items</th>
     <th></th>
     <th></th>
     <th></th>
@@ -9,6 +11,8 @@
 
 <% @carts.each do |cart| %>
   <tr>
+    <td><%= cart.id %></td>
+    <td><%= cart.line_items.count %></td>
     <td><%= link_to 'Show', cart %></td>
     <td><%= link_to 'Edit', edit_cart_path(cart) %></td>
     <td><%= link_to 'Destroy', cart, :confirm => 'Are you sure?', :method => :delete %></td>
