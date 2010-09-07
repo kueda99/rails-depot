@@ -153,3 +153,21 @@
   font-weight: bold;
   margin-right: 2em;
 }
+
+
+#cart .line_item_title {
+  width: 20em;
+  text-align: left;
+}
+
+#cart .line_item_quantity {
+  padding-left: 1em;
+  padding-right: 1em;
+  text-align: center;
+}
+
+#cart .line_item_subtotal {
+  padding-left: 1em;
+  padding-right: 1em;
+  text-align: right
+}
