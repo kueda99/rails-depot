@@ -10,7 +10,7 @@ class Cart < ActiveRecord::Base
   # がアップデートされたものである。データベースには反映されていないの
   # で注意すること。
   def add_product(product_id)
-    current_item = line_items.detect { |item| item.product_id == product_id }
+    current_item = line_items.find(:first, :conditions => ['product_id = ?', product_id])
     if current_item.nil?
       current_item = self.line_items.build(:product_id => product_id)
     else
