@@ -18,11 +18,17 @@ class CartTest < ActiveSupport::TestCase
   # 品がカートにない場合、新規に LineItem インスタンスを作成して返す。
   test "should create a line item if a given product is NOT in the cart" do
     cart = carts(:cart_with_two_items)
-    ruby_id = products(:ruby).id
-    assert_nil cart.line_items.detect { |item| item.product_id == ruby_id }
-    new_line_item = cart.add_product(products(:ruby).id)
-    assert_equal 1, new_line_item.quantity
-    assert_not_nil cart.line_items.detect { |item| item.product_id == ruby_id }
+    ruby_book = products(:ruby)
+    # カートに製品が入っていないことの確認
+    assert !cart.line_items.exists?(:product_id => ruby_book.id)
+
+    item = cart.add_product(ruby_book.id)
+
+    # LineItem オブジェクトがカートに入っており、製品および数量が 1 で
+    # あることの確認
+    assert_equal cart, item.cart
+    assert_equal ruby_book, item.product
+    assert_equal 1, item.quantity
   end
 
   # Cart#add_product(product_id) のテスト その2: 引数 product_id の製品
@@ -30,18 +36,15 @@ class CartTest < ActiveSupport::TestCase
   # が 1 つ増える。
   test "should increment quantity of a line item if a given product is in the cart" do
     cart = carts(:cart_with_two_items)
-    product_one_id = products(:one).id
+    product = products(:one)
+    item = cart.line_items.find(:first, :conditions => ['product_id = ?', product.id])
 
-    item_in_the_cart = cart.line_items.detect { |item| item.product_id == product_one_id }
-    assert_not_nil item_in_the_cart
+    item = cart.add_product(product.id)
 
-    # add_product() によって LineItem インスタンスの quantity の値が 1
-    # つ増えることの確認
-    assert_difference 'item_in_the_cart.quantity' do
-      new_line_item = cart.add_product(product_one_id)
-      assert_equal item_in_the_cart, new_line_item
-    end
-
-    assert_not_nil cart.line_items.detect { |item| item.product_id == product_one_id }
+    # LineItem オブジェクトがカートに入っており、製品および数量が 2 で
+    # あることの確認
+    assert_equal cart, item.cart
+    assert_equal product, item.product
+    assert_equal 2, item.quantity
   end
 end

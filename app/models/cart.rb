@@ -5,6 +5,10 @@ class Cart < ActiveRecord::Base
   # Cart#add_product(product_id) は、関連するラインアイテム
   # (line_items) を 1 つ増やすか、またはすでにその製品がカートにあった
   # 場合は、その製品のためのラインアイテムの属性 quantity を 1 つ増やす。
+  #
+  # 返り値はラインアイテムであり、それは新規に作成されたか、または数量
+  # がアップデートされたものである。データベースには反映されていないの
+  # で注意すること。
   def add_product(product_id)
     current_item = line_items.detect { |item| item.product_id == product_id }
     if current_item.nil?
