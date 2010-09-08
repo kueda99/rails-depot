@@ -32,6 +32,16 @@ class LineItemsControllerTest < ActionController::TestCase
   test "should get new only if params[:product_id] is supplied" do
     get :new, :product_id => @product
     assert_response :success
+
+    # フィールドのチェック (1 つしかフィールドがないということは、おそ
+    # らく数量しか変更できなくなっている。それを確認する。
+    assert_select "form > div.field", 1
+
+    # リンクのチェック
+    assert_select "form[action=?]", %r{/carts/#{@line_item.cart.id}/line_items/#{@line_item.to_param}}
+    assert_select "input#line_item_product_id[value=?]", @product.id
+    assert_select "a[href=?]", %r{/carts/#{@line_item.cart.id}/line_items/#{@line_item.to_param}}, 'Show'
+    assert_select "a[href=?]", %r{/carts/#{@line_item.cart.id}}, 'Back'
   end
 
   test "should get redirected if invalid :product_id is supplied" do
@@ -85,6 +95,7 @@ class LineItemsControllerTest < ActionController::TestCase
 
     # リンクのチェック
     assert_select "form[action=?]", %r{/line_items/#{@line_item.to_param}}
+    assert_select "input#line_item_product_id[value=?]", @line_item.product_id
     assert_select "a[href=?]", %r{/line_items/#{@line_item.to_param}}, 'Show'
     assert_select "a[href=?]", "/line_items", 'Back'
   end
@@ -160,6 +171,7 @@ class LineItemsControllerTest < ActionController::TestCase
 
     # リンクのチェック
     assert_select "form[action=?]", %r{/carts/#{@line_item.cart.id}/line_items/#{@line_item.to_param}}
+    assert_select "input#line_item_product_id[value=?]", @line_item.product_id
     assert_select "a[href=?]", %r{/carts/#{@line_item.cart.id}/line_items/#{@line_item.to_param}}, 'Show'
     assert_select "a[href=?]", %r{/carts/#{@line_item.cart.id}}, 'Back'
   end

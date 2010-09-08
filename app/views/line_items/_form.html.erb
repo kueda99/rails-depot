@@ -13,6 +13,10 @@
 
   <h3>Title: "<%= @line_item.product.title %>"</h3>
 
+  <div class="hidden_field">
+    <%= f.hidden_field :product_id %>
+  </div>
+
   <div class="field">
     <%= f.label :quantity %><br />
     <%= f.text_field :quantity %>
