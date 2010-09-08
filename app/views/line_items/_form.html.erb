@@ -11,14 +11,8 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :cart_id %><br />
-    <%= f.text_field :cart_id %>
-  </div>
-  <div class="field">
-    <%= f.label :product_id %><br />
-    <%= f.text_field :product_id %>
-  </div>
+  <h3>Title: "<%= @line_item.product.title %>"</h3>
+
   <div class="field">
     <%= f.label :quantity %><br />
     <%= f.text_field :quantity %>
