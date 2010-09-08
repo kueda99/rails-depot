@@ -3,4 +3,4 @@
 <% @url = @nested ? cart_line_items_path(@cart) : line_items_path %>
 <%= render 'form', :locals => {:url => @url} %>
 
-<%= link_to 'Back', line_items_path %>
+<%= link_to 'Back', @nested ? cart_path(@cart) : line_items_path %>
