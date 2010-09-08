@@ -1,4 +1,4 @@
-<%= form_for(@line_item) do |f| %>
+<%= form_for(@line_item, :url => @url) do |f| %>
   <% if @line_item.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@line_item.errors.count, "error") %> prohibited this line_item from being saved:</h2>

@@ -1,6 +1,7 @@
 <h1>Editing line_item</h1>
 
-<%= render 'form' %>
+<% @url = @nested ? cart_line_item_path(@cart, @line_item) : line_item_path(@line_item) %>
+<%= render 'form', :locals => {:url => @url} %>
 
 <%= link_to 'Show', @line_item %> |
 <%= link_to 'Back', line_items_path %>
