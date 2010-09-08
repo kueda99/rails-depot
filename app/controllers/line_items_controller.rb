@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class LineItemsController < ApplicationController
   # GET /line_items
   # GET /line_items.xml
@@ -25,6 +26,15 @@ class LineItemsController < ApplicationController
   # GET /line_items/new.xml
   def new
     @line_item = LineItem.new
+
+    # 製品の指定がない場合、ストアの画面に転送する
+    begin
+      @line_item.product = Product.find(params[:product_id])
+    rescue ActiveRecord::RecordNotFound
+      notice = params[:product_id].nil? ? 'No product ID' : 'Invalid product ID'
+      redirect_to store_url, :notice => notice
+      return
+    end
 
     respond_to do |format|
       format.html # new.html.erb

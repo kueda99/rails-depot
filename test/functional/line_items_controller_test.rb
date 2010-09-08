@@ -7,6 +7,7 @@ class LineItemsControllerTest < ActionController::TestCase
     @line_item_in_another_cart = line_items(:li_in_another_cart)
     @cart = carts(:cart_with_two_items)    # このカートに @line_item は入っている
     session[:cart_id] = @cart.id
+    @product = products(:ruby)
   end
 
   # カートの中に 2 つの製品が入っていることの確認 (フィクスチャーのチェック)
@@ -25,7 +26,17 @@ class LineItemsControllerTest < ActionController::TestCase
 
   test "should get new" do
     get :new
+    assert_redirected_to store_path
+  end
+
+  test "should get new only if params[:product_id] is supplied" do
+    get :new, :product_id => @product
     assert_response :success
+  end
+
+  test "should get redirected if invalid :product_id is supplied" do
+    get :new, :product_id => 'foobar'
+    assert_redirected_to store_path
   end
 
   # ラインアイテムを新規に作成した場合、自動的にカートに入ることの確認
