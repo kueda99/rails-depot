@@ -34,6 +34,7 @@ class LineItemsController < ApplicationController
     # 製品の指定がない場合、ストアの画面に転送する
     begin
       @line_item.product = Product.find(params[:product_id])
+      @line_item.cart = @cart = current_cart
     rescue ActiveRecord::RecordNotFound
       notice = params[:product_id].nil? ? 'No product ID' : 'Invalid product ID'
       redirect_to store_url, :notice => notice

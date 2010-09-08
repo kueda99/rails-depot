@@ -38,10 +38,9 @@ class LineItemsControllerTest < ActionController::TestCase
     assert_select "form > div.field", 1
 
     # リンクのチェック
-    assert_select "form[action=?]", %r{/carts/#{@line_item.cart.id}/line_items/#{@line_item.to_param}}
+    assert_select "form[action=?]", %r{/line_items}
     assert_select "input#line_item_product_id[value=?]", @product.id
-    assert_select "a[href=?]", %r{/carts/#{@line_item.cart.id}/line_items/#{@line_item.to_param}}, 'Show'
-    assert_select "a[href=?]", %r{/carts/#{@line_item.cart.id}}, 'Back'
+    assert_select "a[href=?]", %r{/line_items}, 'Back'
   end
 
   test "should get redirected if invalid :product_id is supplied" do
