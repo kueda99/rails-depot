@@ -59,4 +59,17 @@ class CartsControllerTest < ActionController::TestCase
     get :show, :id => fault_id
     assert_redirected_to store_path
   end
+
+
+  # リソースがネストされている URL によってカートの中身をさせたとき (そ
+  # のカートに入っているラインアイテムの一覧が表示される)、ラインアイテ
+  # ムの Edit および Destroy のリンクがリソースのネストになっているかの
+  # 確認
+  test "links for editing and destroying line items should be nested" do
+    get :show, :id => @cart.to_param
+    assert_response :success
+    assert_select "a[href=?]", %r{/carts/#{@cart.to_param}/line_items/[0-9]+/edit}, 'Edit'
+    assert_select "a[href=?]", %r{/carts/#{@cart.to_param}/line_items/[0-9]+}, 'Destroy'
+  end
+
 end

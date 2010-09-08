@@ -5,7 +5,7 @@ class LineItemsControllerTest < ActionController::TestCase
   setup do
     @line_item = line_items(:li_one)
     @line_item_in_another_cart = line_items(:li_in_another_cart)
-    @cart = carts(:cart_with_two_items)
+    @cart = carts(:cart_with_two_items)    # このカートに @line_item は入っている
     session[:cart_id] = @cart.id
   end
 
@@ -44,14 +44,13 @@ class LineItemsControllerTest < ActionController::TestCase
   end
 
 
-  # ラインアイテムについて :show した場合、もし自分のカートに入っている
-  # 場合は情報を表示する。そうでないときは「そんなもの存在していない」
-  # ように取り扱われる
-
   test "should show line_item" do
     get :show, :id => @line_item.to_param
     assert_response :success
+    assert_select "a[href=?]", %r{/line_items/#{@line_item.to_param}/edit}, 'Edit'
+    assert_select "a[href=?]", %r{/line_items}, 'Back'
   end
+
 
   # 他のカートに入っているラインアイテムを表示しようとしても、「そんな
   # のないよ」と表示される (実際にはデータベースにある)。
@@ -65,11 +64,20 @@ class LineItemsControllerTest < ActionController::TestCase
   # ラインアイテムについて :edit した場合、もし自分のカートに入っている
   # 場合は情報を表示する。そうでないときは「そんなもの存在していない」
   # ように取り扱われる
-
   test "should get edit" do
     get :edit, :id => @line_item.to_param
     assert_response :success
+
+    # フィールドのチェック (1 つしかフィールドがないということは、おそ
+    # らく数量しか変更できなくなっている。それを確認する。
+    assert_select "form > div.field", 1
+
+    # リンクのチェック
+    assert_select "form[action=?]", %r{/line_items/#{@line_item.to_param}}
+    assert_select "a[href=?]", %r{/line_items/#{@line_item.to_param}}, 'Show'
+    assert_select "a[href=?]", "/line_items", 'Back'
   end
+
 
   # 他のカートに入っているラインアイテムを表示しようとしても、「そんな
   # のないよ」と表示される (実際にはデータベースにある)。
@@ -116,6 +124,48 @@ class LineItemsControllerTest < ActionController::TestCase
     assert_raise(ActiveRecord::RecordNotFound) do
       delete :destroy, :id => @line_item_in_another_cart.to_param
     end
+  end
+
+
+  # ラインアイテムの show 画面には Edit と Back のリンクがあり、それぞ
+  # れネストしている。
+  test "show for nested resource should have links to nested Edit and Back" do
+    get :show, :id => @line_item.to_param, :cart_id => @line_item.cart.id
+    assert_response :success
+    assert_select "a[href=?]", %r{/carts/#{@line_item.cart.id}/line_items/#{@line_item.to_param}/edit}, 'Edit'
+    assert_select "a[href=?]", %r{/carts/#{@line_item.cart.id}}, 'Back'
+  end
+
+
+  # ラインアイテムの編集画面には更新のボタンがあり、それのリンクは
+  # /carts/3/lineitems/20 のようになっている
+  test "edit form should submit to url in the form of nested resource" do
+    get :edit, :id => @line_item.to_param, :cart_id => @line_item.cart.id
+    assert_response :success
+
+    # フィールドのチェック (1 つしかフィールドがないということは、おそ
+    # らく数量しか変更できなくなっている。それを確認する。
+    assert_select "form > div.field", 1
+
+    # リンクのチェック
+    assert_select "form[action=?]", %r{/carts/#{@line_item.cart.id}/line_items/#{@line_item.to_param}}
+    assert_select "a[href=?]", %r{/carts/#{@line_item.cart.id}/line_items/#{@line_item.to_param}}, 'Show'
+    assert_select "a[href=?]", %r{/carts/#{@line_item.cart.id}}, 'Back'
+  end
+
+
+  # ラインアイテムの編集画面で更新のボタンを押すと、カートの show にリ
+  # ダイレクトされることを確かめるテスト。
+  test "putting line item nested in cart should be redirected to 'show' page of the cart" do
+    put :update, :id => @line_item.to_param, :cart_id => @line_item.cart.id
+    assert_redirected_to cart_path(@line_item.cart.id)
+  end
+
+  # cart でネストされたラインアイテムを削除すると、cart の :show の画面
+  # にリダイレクトされる。
+  test "deleting line item nested in cart should be redirected to 'show' page of the cart" do
+    delete :destroy, :id => @line_item.to_param, :cart_id => @cart.id
+    assert_redirected_to cart_path(@line_item.cart.id)
   end
 
 end
