@@ -105,7 +105,7 @@ class LineItemsControllerTest < ActionController::TestCase
 
   test "should update line_item" do
     put :update, :id => @line_item.to_param, :line_item => @line_item.attributes
-    assert_redirected_to line_item_path(assigns(:line_item))
+    assert_redirected_to cart_path(assigns(:line_item).cart)
   end
 
   test "should not update line_item in another cart" do
