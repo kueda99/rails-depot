@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 class LineItemsController < ApplicationController
+
+  # URL がネストされていれば、@nested を true にする
+  before_filter :check_nested
+
   # GET /line_items
   # GET /line_items.xml
   def index
@@ -92,5 +96,11 @@ class LineItemsController < ApplicationController
       format.html { redirect_to(cart_url(@cart)) }
       format.xml  { head :ok }
     end
+  end
+
+  private
+
+  def check_nested
+    @nested = params[:cart_id].nil? ? false : true
   end
 end
