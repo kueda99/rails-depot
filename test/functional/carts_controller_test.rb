@@ -49,4 +49,14 @@ class CartsControllerTest < ActionController::TestCase
 
     assert_redirected_to carts_path
   end
+
+
+  # カートの show の URL に、存在していない id を指定した場合、ストアの
+  # ページに転送されることを確認するテスト。
+  test "should redirect to store url if no cart is found" do
+    fault_id = 666
+    assert !Cart.exists?(fault_id)
+    get :show, :id => fault_id
+    assert_redirected_to store_path
+  end
 end
