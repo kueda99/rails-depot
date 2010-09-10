@@ -2,7 +2,7 @@
 class LineItemsController < ApplicationController
 
   # URL がネストされていれば、@nested を true にする
-  before_filter :check_nested
+  before_filter :cart_id_discrepancy, :check_nested
 
   # GET /line_items
   # GET /line_items.xml
@@ -86,6 +86,25 @@ class LineItemsController < ApplicationController
     end
   end
 
+#+        format.html do
+#+          if @nested
+#+            redirect_to(line_item_path(@line_item), :notice => 'Line item was successfully updated.')
+#+          else
+#+            redirect_to(cart_path(current_cart), :notice => 'Line item was successfully updated.')
+#+          end
+#+        end
+#         format.xml  { head :ok }
+#       else
+#-        format.html { render :action => "edit" }
+#+        format.html do
+#+          if @nested
+#+            render :action => "edit" #, :cart_id => @line_item.cart
+#+          else
+#+            render :action => "edit"
+#+          end
+#+        end
+#
+
   # DELETE /line_items/1
   # DELETE /line_items/1.xml
   def destroy
@@ -104,4 +123,20 @@ class LineItemsController < ApplicationController
   def check_nested
     @nested = params[:cart_id].nil? ? false : true
   end
+
+
+  # URL にカートの id が含まれており、かつ session[:cart_id] が存在して
+  # いない、または存在していても URL で指定のカートの id に一致しない場
+  # 合は ストアのページにリダイレクトさせる
+  def cart_id_discrepancy
+    # 管理者としてログインしているとき (session[:user_id] が nil ではな
+    # い) は、データベース上のカートの内容を自由に閲覧することができる
+    return true unless session[:user_id].nil?
+
+    if params[:cart_id] && (params[:cart_id].to_i != current_cart.id)
+      redirect_to store_path,
+      :notice => %{何を考えてんだよ !! (カート ID は #{current_cart.id} だけど、params は #{params[:cart_id]} だよ)}
+    end
+  end
+
 end

@@ -1,4 +1,8 @@
+# -*- coding: utf-8 -*-
 class CartsController < ApplicationController
+
+  before_filter :cart_id_discrepancy
+
   # GET /carts
   # GET /carts.xml
   def index
@@ -87,4 +91,20 @@ class CartsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+
+  # URL にカートの id が含まれており、かつ session[:cart_id] が存在して
+  # いない、または存在していても URL で指定のカートの id に一致しない場
+  # 合は ストアのページにリダイレクトさせる
+  def cart_id_discrepancy
+    # 管理者としてログインしているとき (session[:user_id] が nil ではな
+    # い) は、データベース上のカートの内容を自由に閲覧することができる
+    return true unless session[:user_id].nil?
+
+    if params[:id] && (params[:id].to_i != current_cart.id)
+      redirect_to store_path,
+      :notice => %{何を考えてんだよ !! (カート ID は #{current_cart.id} だけど、params は #{params[:id]} だよ)}
+    end
+  end
+
 end

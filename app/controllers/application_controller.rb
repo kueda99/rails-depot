@@ -9,7 +9,9 @@ class ApplicationController < ActionController::Base
   rescue ActiveRecord::RecordNotFound
     cart = Cart.create    # new ではなくて create
     session[:cart_id] = cart.id
+
+    logger.warn "Cart not found and created one with id #{session[:cart_id]}"
+
     cart
   end
-
 end
