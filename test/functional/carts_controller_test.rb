@@ -107,19 +107,20 @@ class CartsControllerTest < ActionController::TestCase
   # ない場合、セッションに記録された cart の内容一覧ページに移動する。
   # ただし、管理者でない場合のみ。
   test "discrepancy of cart ids should redirect to store page" do
-    # 「顧客モード」にする
-    switch_to_customer_mode
+    # 「顧客モード」
+    session = {:user_id => nil}
 
-    @request.session[:cart_id] = @cart.id
-    get :show, :id => @cart
+    # カート id について params[] と session[] が同じ
+    get :show, {:id => @cart}, session.merge(:cart_id => @cart.id)
     assert_response :success
 
-    @request.session[:cart_id] = @cart.id
-    get :show, :id => 666
+    # カート id について params[] と session[] が違う。おまけに
+    # params[] で指定した id を持つカートは存在していない。
+    get :show, {:id => 666}, session.merge(:cart_id => @cart.id)
     assert_redirected_to store_url
 
-    @request.session[:cart_id] = nil
-    get :show, :id => @cart
+    # カート id について params[] には値が入っているが、session[] にはない。
+    get :show, {:id => @cart}, session.merge(:cart_id => nil)
     assert_redirected_to store_path
   end
 
@@ -128,20 +129,21 @@ class CartsControllerTest < ActionController::TestCase
   # ジに移動されない。
   test "being in admin mode, discrepancy of cart ids should not redirect to store page" do
     # 「管理者モード」にする
-    switch_to_admin_mode
+    session = {:user_id => 1234}
 
-    @request.session[:cart_id] = @cart.id
-    get :show, :id => @cart
+    # カート id が params[] と session[] とで同じ
+    get :show, {:id => @cart}, session.merge(:cart_id => @cart.id)
     assert_response :success
 
     # カートが存在していないときは、管理者モードの場合でもストアページ
     # にリダイレクトされる
-    @request.session[:cart_id] = @cart.id
-    get :show, :id => 666
+    #    @request.session[:cart_id] = @cart.id
+    get :show, {:id => 666}, session.merge(:cart_id => @cart.id)
     assert_redirected_to store_path
 
-    @request.session[:cart_id] = nil
-    get :show, :id => @cart
+    # session[] にカート id が入っていなくても、params[] で指定されてい
+    # れば、カートのページを表示させる。
+    get :show, {:id => @cart}, session.merge(:cart_id => nil)
     assert_response :success
   end
 
