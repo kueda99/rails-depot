@@ -45,18 +45,21 @@ class CartsControllerTest < ActionController::TestCase
   end
 
   test "should update cart in customer mode" do
-    switch_to_customer_mode
+    params_arg = {:id => @cart.to_param, :cart => @cart.attributes}
 
-    @request.session[:cart_id] = @cart.to_param
-    put :update, :id => @cart.to_param, :cart => @cart.attributes
+    # カート id について params[] と session[] が同じ
+    put :update, params_arg, {:cart_id => @cart.to_param}
     assert_redirected_to cart_path(assigns(:cart))
 
-    @request.session[:cart_id] = nil
-    put :update, :id => @cart.to_param, :cart => @cart.attributes
+    # カート id について params[] には値が入っているが、session[] には
+    # ない。顧客モードでは、ストアページにリダイレクトされる。
+    put :update, params_arg, {:cart_id => nil}
     assert_redirected_to store_path
 
-    @request.session[:cart_id] = @another_cart.to_param
-    put :update, :id => @cart.to_param, :cart => @cart.attributes
+    # カート id について params[] と session[] が一致しない。すなわち顧
+    # 客モードで他のカートをアップデートしようとする。その場合はストア
+    # ページにリダイレクトされる。
+    put :update, params_arg, {:cart_id => @another_cart.to_param}
     assert_redirected_to store_path
   end
 
