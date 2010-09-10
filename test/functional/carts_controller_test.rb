@@ -4,6 +4,7 @@ require 'test_helper'
 class CartsControllerTest < ActionController::TestCase
   setup do
     @cart = carts(:cart_with_two_items)
+    @another_cart = carts(:another_cart)
   end
 
   test "should get index" do
@@ -26,6 +27,9 @@ class CartsControllerTest < ActionController::TestCase
   end
 
   test "should show cart" do
+    switch_to_customer_mode
+
+    @request.session[:cart_id] = @cart.to_param
     get :show, :id => @cart.to_param
     assert_response :success
     # カートに入っているラインアイテムの個数 + ヘッダ
@@ -33,16 +37,39 @@ class CartsControllerTest < ActionController::TestCase
   end
 
   test "should get edit" do
+    switch_to_customer_mode
+
+    @request.session[:cart_id] = @cart.to_param
     get :edit, :id => @cart.to_param
     assert_response :success
   end
 
-  test "should update cart" do
+  test "should update cart in customer mode" do
+    switch_to_customer_mode
+
+    @request.session[:cart_id] = @cart.to_param
     put :update, :id => @cart.to_param, :cart => @cart.attributes
     assert_redirected_to cart_path(assigns(:cart))
+
+    @request.session[:cart_id] = nil
+    put :update, :id => @cart.to_param, :cart => @cart.attributes
+    assert_redirected_to store_path
+
+    @request.session[:cart_id] = @another_cart.to_param
+    put :update, :id => @cart.to_param, :cart => @cart.attributes
+    assert_redirected_to store_path
   end
 
+#  test "should update cart in admin mode" do
+#    switch_to_admin_mode
+#    put :update, :id => @cart.to_param, :cart => @cart.attributes
+#    assert_redirected_to cart_path(assigns(:cart))
+#  end
+
   test "should destroy cart" do
+    switch_to_customer_mode
+
+    @request.session[:cart_id] = @cart.to_param
     assert_difference('Cart.count', -1) do
       delete :destroy, :id => @cart.to_param
     end
@@ -66,6 +93,9 @@ class CartsControllerTest < ActionController::TestCase
   # ムの Edit および Destroy のリンクがリソースのネストになっているかの
   # 確認
   test "links for editing and destroying line items should be nested" do
+    switch_to_customer_mode
+
+    @request.session[:cart_id] = @cart.to_param
     get :show, :id => @cart.to_param
     assert_response :success
     assert_select "a[href=?]", %r{/carts/#{@cart.to_param}/line_items/[0-9]+/edit}, 'Edit'
@@ -78,7 +108,7 @@ class CartsControllerTest < ActionController::TestCase
   # ただし、管理者でない場合のみ。
   test "discrepancy of cart ids should redirect to store page" do
     # 「顧客モード」にする
-    @request.session[:user_id] = nil
+    switch_to_customer_mode
 
     @request.session[:cart_id] = @cart.id
     get :show, :id => @cart
@@ -98,15 +128,17 @@ class CartsControllerTest < ActionController::TestCase
   # ジに移動されない。
   test "being in admin mode, discrepancy of cart ids should not redirect to store page" do
     # 「管理者モード」にする
-    @request.session[:user_id] = 1234
+    switch_to_admin_mode
 
     @request.session[:cart_id] = @cart.id
     get :show, :id => @cart
     assert_response :success
 
+    # カートが存在していないときは、管理者モードの場合でもストアページ
+    # にリダイレクトされる
     @request.session[:cart_id] = @cart.id
     get :show, :id => 666
-    assert_response :success
+    assert_redirected_to store_path
 
     @request.session[:cart_id] = nil
     get :show, :id => @cart

@@ -101,7 +101,7 @@ class CartsController < ApplicationController
     # い) は、データベース上のカートの内容を自由に閲覧することができる
     return true unless session[:user_id].nil?
 
-    if params[:id] && (params[:id].to_i != current_cart.id)
+    if params[:id] && (params[:id].to_param.to_i != current_cart.id)
       redirect_to store_path,
       :notice => %{何を考えてんだよ !! (カート ID は #{current_cart.id} だけど、params は #{params[:id]} だよ)}
     end
