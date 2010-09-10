@@ -72,4 +72,45 @@ class CartsControllerTest < ActionController::TestCase
     assert_select "a[href=?]", %r{/carts/#{@cart.to_param}/line_items/[0-9]+}, 'Destroy'
   end
 
+
+  # セッションに記録された cart_id と、URL で指定した cart_id が一致し
+  # ない場合、セッションに記録された cart の内容一覧ページに移動する。
+  # ただし、管理者でない場合のみ。
+  test "discrepancy of cart ids should redirect to store page" do
+    # 「顧客モード」にする
+    @request.session[:user_id] = nil
+
+    @request.session[:cart_id] = @cart.id
+    get :show, :id => @cart
+    assert_response :success
+
+    @request.session[:cart_id] = @cart.id
+    get :show, :id => 666
+    assert_redirected_to store_url
+
+    @request.session[:cart_id] = nil
+    get :show, :id => @cart
+    assert_redirected_to store_path
+  end
+
+  # 管理者は、セッションに記録された cart_id と、URL で指定した
+  # cart_id が一致しない場合、セッションに記録された cart の内容一覧ペー
+  # ジに移動されない。
+  test "discrepancy of cart ids should redirect to store page" do
+    # 「管理者モード」にする
+    @request.session[:user_id] = 1234
+
+    @request.session[:cart_id] = @cart.id
+    get :show, :id => @cart
+    assert_response :success
+
+    @request.session[:cart_id] = @cart.id
+    get :show, :id => 666
+    assert_response :success
+
+    @request.session[:cart_id] = nil
+    get :show, :id => @cart
+    assert_response :success
+  end
+
 end
