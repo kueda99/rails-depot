@@ -27,4 +27,21 @@ class ActiveSupport::TestCase
       end
     end
   end
+
+
+  #
+  # HTTP リクエストを実行するときのモード。
+  # 顧客モードと管理者モードがある。
+  #
+  def switch_to_customer_mode(mode=true)
+    if mode
+      @request.session[:user_id] = nil
+    else
+      @request.session[:user_id] = 1234
+    end
+  end
+
+  def switch_to_admin_mode
+    switch_to_customer_mode(false)
+  end
 end
