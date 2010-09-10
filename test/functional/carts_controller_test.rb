@@ -96,7 +96,7 @@ class CartsControllerTest < ActionController::TestCase
   # 管理者は、セッションに記録された cart_id と、URL で指定した
   # cart_id が一致しない場合、セッションに記録された cart の内容一覧ペー
   # ジに移動されない。
-  test "discrepancy of cart ids should redirect to store page" do
+  test "being in admin mode, discrepancy of cart ids should not redirect to store page" do
     # 「管理者モード」にする
     @request.session[:user_id] = 1234
 
