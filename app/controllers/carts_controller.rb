@@ -6,6 +6,12 @@ class CartsController < ApplicationController
   # GET /carts
   # GET /carts.xml
   def index
+    # 管理者でなければ、:show アクションにリダイレクトする
+    if session[:user_id].nil?
+      redirect_to cart_path(current_cart.id), :notice => 'Indexing carts not allowed'
+      return
+    end
+
     @carts = Cart.all
 
     respond_to do |format|

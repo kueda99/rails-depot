@@ -7,11 +7,21 @@ class CartsControllerTest < ActionController::TestCase
     @another_cart = carts(:another_cart)
   end
 
-  test "should get index" do
-    get :index
+
+  # 顧客モードでは cart コントローラの show アクションにリダイレクトさ
+  # れる。管理者モードでは一覧が表示される。
+  test "should get index redirected to show in customer mode" do
+    get :index, nil, {:user_id => nil, :cart_id => @cart.id}
+    assert_redirected_to cart_path(@cart.id)
+    assert_equal 'Indexing carts not allowed', flash[:notice]
+  end
+
+  test "should get index in admin mode" do
+    get :index, nil, {:user_id => 1234}
     assert_response :success
     assert_not_nil assigns(:carts)
   end
+
 
   test "should get new" do
     get :new
