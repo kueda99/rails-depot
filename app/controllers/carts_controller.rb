@@ -91,9 +91,11 @@ class CartsController < ApplicationController
   def destroy
     @cart = Cart.find(params[:id])
     @cart.destroy
+    session[:cart_id] = nil
 
     respond_to do |format|
-      format.html { redirect_to(carts_url) }
+      format.html { redirect_to(carts_url,
+                                :notice => session[:user_id].nil? ? "Your cart is currently empty" : "Cart of id #{@cart.id} successfully deleted") }
       format.xml  { head :ok }
     end
   end
@@ -109,7 +111,7 @@ class CartsController < ApplicationController
 
     if params[:id] && (params[:id].to_param.to_i != current_cart.id)
       redirect_to store_path,
-      :notice => %{何を考えてんだよ !! (カート ID は #{current_cart.id} だけど、params は #{params[:id]} だよ)}
+      :notice => "Operation denied because the cart of id #{params[:id]} is not yours"
     end
   end
 

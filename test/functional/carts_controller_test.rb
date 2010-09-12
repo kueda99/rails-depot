@@ -79,15 +79,44 @@ class CartsControllerTest < ActionController::TestCase
 #    assert_redirected_to cart_path(assigns(:cart))
 #  end
 
-  test "should destroy cart" do
+
+  test "should destroy cart of his own" do
     switch_to_customer_mode
 
     @request.session[:cart_id] = @cart.to_param
     assert_difference('Cart.count', -1) do
-      delete :destroy, :id => @cart.to_param
+      assert_difference('LineItem.count', -2) do
+        delete :destroy, :id => @cart.to_param
+      end
     end
 
     assert_redirected_to carts_path
+    assert_equal "Your cart is currently empty", flash[:notice]
+  end
+
+  # 顧客モードでは、他人のカートを削除することはできない。試みた場合、
+  # ストアページへリダイレクトする。
+  test "should not destroy cart which other owns" do
+    assert_no_difference 'Cart.count' do
+      assert_no_difference 'LineItem.count' do
+        delete :destroy, {:id => @another_cart.to_param},
+        {:cart_id => @cart.to_param, :user_id => nil}
+      end
+    end
+    assert_redirected_to store_path
+    assert_equal "Operation denied because the cart of id #{@another_cart.id} is not yours", flash[:notice]
+  end
+
+  # 管理者モードでは、任意のカートを削除することができる。削除した後は
+  # カートの一覧のページに転送される。
+  test "should destroy any cart in admin mode" do
+    assert_difference('Cart.count', -1) do
+      assert_difference('LineItem.count', -2) do
+        delete :destroy, {:id => @cart.to_param}, {:user_id => 1234}
+      end
+    end
+    assert_redirected_to carts_url
+    assert_equal "Cart of id #{@cart.id} successfully deleted", flash[:notice]
   end
 
 
