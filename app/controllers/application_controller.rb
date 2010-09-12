@@ -14,4 +14,10 @@ class ApplicationController < ActionController::Base
 
     cart
   end
+
+  # 管理者かどうかを返すメソッド。コントローラで session の中身を直接参
+  # 照しないようにするため。
+  def admin?
+    !session[:user_id].nil?
+  end
 end

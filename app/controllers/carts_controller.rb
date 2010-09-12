@@ -7,7 +7,7 @@ class CartsController < ApplicationController
   # GET /carts.xml
   def index
     # 管理者でなければ、:show アクションにリダイレクトする
-    if session[:user_id].nil?
+    if !admin?
       redirect_to cart_url(current_cart.id), :notice => 'Indexing carts not allowed'
       return
     end
@@ -95,7 +95,7 @@ class CartsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(carts_url,
-                                :notice => session[:user_id].nil? ? "Your cart is currently empty" : "Cart of id #{@cart.id} successfully deleted") }
+                                :notice => admin? ? "Cart of id #{@cart.id} successfully deleted" : "Your cart is currently empty") }
       format.xml  { head :ok }
     end
   end
@@ -105,9 +105,10 @@ class CartsController < ApplicationController
   # いない、または存在していても URL で指定のカートの id に一致しない場
   # 合は ストアのページにリダイレクトさせる
   def cart_id_discrepancy
-    # 管理者としてログインしているとき (session[:user_id] が nil ではな
-    # い) は、データベース上のカートの内容を自由に閲覧することができる
-    return true unless session[:user_id].nil?
+    # 管理者としてログインしているとき (ApplicationController#admin?
+    # が true を返す) は、データベース上のカートの内容を自由に閲覧する
+    # ことができる
+    return true if admin?
 
     if params[:id] && (params[:id].to_param.to_i != current_cart.id)
       redirect_to store_url,

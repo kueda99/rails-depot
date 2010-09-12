@@ -11,7 +11,7 @@ class LineItemsController < ApplicationController
     if @nested
       @line_items = Cart.find(params[:cart_id]).line_items
     else
-      @line_items = (session[:user_id].nil? ? current_cart.line_items : LineItem.all)
+      @line_items = (admin? ? LineItem.all : current_cart.line_items)
     end
 
     respond_to do |format|
@@ -134,9 +134,10 @@ class LineItemsController < ApplicationController
   # いない、または存在していても URL で指定のカートの id に一致しない場
   # 合は ストアのページにリダイレクトさせる
   def cart_id_discrepancy
-    # 管理者としてログインしているとき (session[:user_id] が nil ではな
-    # い) は、データベース上のカートの内容を自由に閲覧することができる
-    return true unless session[:user_id].nil?
+    # 管理者としてログインしているとき (ApplicationController#admin?
+    # が true を返す) は、データベース上のカートの内容を自由に閲覧する
+    # ことができる
+    return true if admin?
 
     if params[:cart_id] && (params[:cart_id].to_param.to_i != current_cart.id)
       redirect_to store_url,
