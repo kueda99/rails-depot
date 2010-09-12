@@ -31,4 +31,10 @@ class LineItemTest < ActiveSupport::TestCase
       assert @lineitem.invalid?, %{line item with quantity "#{value}" should be invalid}
     end
   end
+
+  test "should return total price" do
+    assert_equal 9.99, @lineitem.total_price
+    @lineitem.quantity = 2
+    assert_equal 19.98, @lineitem.total_price
+  end
 end

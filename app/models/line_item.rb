@@ -1,6 +1,12 @@
+# -*- coding: utf-8 -*-
 class LineItem < ActiveRecord::Base
   belongs_to :cart
   belongs_to :product
 
   validates :quantity, :numericality => {:greater_than => 0, :only_integer => true}
+
+  # ラインアイテムの合計の金額を返す
+  def total_price
+    (product.price * quantity)
+  end
 end

@@ -19,4 +19,9 @@ class Cart < ActiveRecord::Base
     current_item
   end
 
+
+  # カートに入っているラインアイテムの合計の金額を返す
+  def total_price
+    line_items.inject(0) { |result, item| result += item.total_price }
+  end
 end
