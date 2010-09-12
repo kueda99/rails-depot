@@ -7,7 +7,8 @@ class LineItemsController < ApplicationController
   # GET /line_items
   # GET /line_items.xml
   def index
-    @line_items = current_cart.line_items
+
+    @line_items = (session[:user_id].nil? ? current_cart.line_items : LineItem.all)
 
     respond_to do |format|
       format.html # index.html.erb

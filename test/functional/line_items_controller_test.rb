@@ -18,11 +18,22 @@ class LineItemsControllerTest < ActionController::TestCase
     assert_equal 2, @cart.line_items.count    # 駄目押し
   end
 
+  # 顧客モードでは自分のカートに入っている製品しかリストされない
   test "should get index" do
     get :index
     assert_response :success
     assert_not_nil assigns(:line_items)
+    assert_select "tr", 3    # テーブルのヘッダ (1) + フィクスチャーの個数 (2)
   end
+
+  # 管理者モードではすべての顧客がカートに入れている製品がリストされる
+  test "should get index in admin mode" do
+    get :index, nil, {:user_id => 1234}
+    assert_response :success
+    assert_not_nil assigns(:line_items)
+    assert_select "tr", 4
+  end
+
 
   test "should get new" do
     get :new
