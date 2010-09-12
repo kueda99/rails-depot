@@ -54,7 +54,7 @@ class LineItemsControllerTest < ActionController::TestCase
 
   test "should get new" do
     get :new
-    assert_redirected_to store_path
+    assert_redirected_to store_url
   end
 
   test "should get new only if params[:product_id] is supplied" do
@@ -73,7 +73,7 @@ class LineItemsControllerTest < ActionController::TestCase
 
   test "should get redirected if invalid :product_id is supplied" do
     get :new, :product_id => 'foobar'
-    assert_redirected_to store_path
+    assert_redirected_to store_url
   end
 
   # ラインアイテムを新規に作成した場合、自動的にカートに入ることの確認
@@ -88,7 +88,7 @@ class LineItemsControllerTest < ActionController::TestCase
     # ちゃんとカートの中に入ったかの確認
     assert_equal cart_items_count + 1, @cart.line_items.count
     assert_equal product_items_count + 1, products(:ruby).line_items.count
-    assert_redirected_to cart_path(@cart)
+    assert_redirected_to cart_url(@cart)
   end
 
 
@@ -143,7 +143,7 @@ class LineItemsControllerTest < ActionController::TestCase
 
   test "should update line_item" do
     put :update, :id => @line_item.to_param, :line_item => @line_item.attributes
-    assert_redirected_to cart_path(assigns(:line_item).cart)
+    assert_redirected_to cart_url(assigns(:line_item).cart)
   end
 
   test "should not update line_item in another cart" do
@@ -166,7 +166,7 @@ class LineItemsControllerTest < ActionController::TestCase
 
     # LineItem インスタンス削除で 'GET /carts/:id' (show アクション) へ
     # リダイレクトされる (そこでは LineItem の一覧が表示される)。
-    assert_redirected_to cart_path(cart_id)
+    assert_redirected_to cart_url(cart_id)
   end
 
   test "should not destroy line_item in another cart" do
@@ -208,14 +208,14 @@ class LineItemsControllerTest < ActionController::TestCase
   # ダイレクトされることを確かめるテスト。
   test "putting line item nested in cart should be redirected to 'show' page of the cart" do
     put :update, :id => @line_item.to_param, :cart_id => @line_item.cart.id
-    assert_redirected_to cart_path(@line_item.cart.id)
+    assert_redirected_to cart_url(@line_item.cart.id)
   end
 
   # cart でネストされたラインアイテムを削除すると、cart の :show の画面
   # にリダイレクトされる。
   test "deleting line item nested in cart should be redirected to 'show' page of the cart" do
     delete :destroy, :id => @line_item.to_param, :cart_id => @cart.id
-    assert_redirected_to cart_path(@line_item.cart.id)
+    assert_redirected_to cart_url(@line_item.cart.id)
   end
 
 end

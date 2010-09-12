@@ -139,7 +139,7 @@ class LineItemsController < ApplicationController
     return true unless session[:user_id].nil?
 
     if params[:cart_id] && (params[:cart_id].to_param.to_i != current_cart.id)
-      redirect_to store_path,
+      redirect_to store_url,
       :notice => %{何を考えてんだよ !! (カート ID は #{current_cart.id} だけど、params は #{params[:cart_id]} だよ)}
     end
   end

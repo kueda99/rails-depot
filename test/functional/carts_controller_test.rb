@@ -12,7 +12,7 @@ class CartsControllerTest < ActionController::TestCase
   # れる。管理者モードでは一覧が表示される。
   test "should get index redirected to show in customer mode" do
     get :index, nil, {:user_id => nil, :cart_id => @cart.id}
-    assert_redirected_to cart_path(@cart.id)
+    assert_redirected_to cart_url(@cart.id)
     assert_equal 'Indexing carts not allowed', flash[:notice]
   end
 
@@ -33,7 +33,7 @@ class CartsControllerTest < ActionController::TestCase
       post :create, :cart => @cart.attributes
     end
 
-    assert_redirected_to cart_path(assigns(:cart))
+    assert_redirected_to cart_url(assigns(:cart))
   end
 
   test "should show cart" do
@@ -59,24 +59,24 @@ class CartsControllerTest < ActionController::TestCase
 
     # カート id について params[] と session[] が同じ
     put :update, params_arg, {:cart_id => @cart.to_param}
-    assert_redirected_to cart_path(assigns(:cart))
+    assert_redirected_to cart_url(assigns(:cart))
 
     # カート id について params[] には値が入っているが、session[] には
     # ない。顧客モードでは、ストアページにリダイレクトされる。
     put :update, params_arg, {:cart_id => nil}
-    assert_redirected_to store_path
+    assert_redirected_to store_url
 
     # カート id について params[] と session[] が一致しない。すなわち顧
     # 客モードで他のカートをアップデートしようとする。その場合はストア
     # ページにリダイレクトされる。
     put :update, params_arg, {:cart_id => @another_cart.to_param}
-    assert_redirected_to store_path
+    assert_redirected_to store_url
   end
 
 #  test "should update cart in admin mode" do
 #    switch_to_admin_mode
 #    put :update, :id => @cart.to_param, :cart => @cart.attributes
-#    assert_redirected_to cart_path(assigns(:cart))
+#    assert_redirected_to cart_url(assigns(:cart))
 #  end
 
 
@@ -90,7 +90,7 @@ class CartsControllerTest < ActionController::TestCase
       end
     end
 
-    assert_redirected_to carts_path
+    assert_redirected_to carts_url
     assert_equal "Your cart is currently empty", flash[:notice]
   end
 
@@ -103,7 +103,7 @@ class CartsControllerTest < ActionController::TestCase
         {:cart_id => @cart.to_param, :user_id => nil}
       end
     end
-    assert_redirected_to store_path
+    assert_redirected_to store_url
     assert_equal "Operation denied because the cart of id #{@another_cart.id} is not yours", flash[:notice]
   end
 
@@ -126,7 +126,7 @@ class CartsControllerTest < ActionController::TestCase
     fault_id = 666
     assert !Cart.exists?(fault_id)
     get :show, :id => fault_id
-    assert_redirected_to store_path
+    assert_redirected_to store_url
   end
 
 
@@ -163,7 +163,7 @@ class CartsControllerTest < ActionController::TestCase
 
     # カート id について params[] には値が入っているが、session[] にはない。
     get :show, {:id => @cart}, session.merge(:cart_id => nil)
-    assert_redirected_to store_path
+    assert_redirected_to store_url
   end
 
   # 管理者は、セッションに記録された cart_id と、URL で指定した
@@ -181,7 +181,7 @@ class CartsControllerTest < ActionController::TestCase
     # にリダイレクトされる
     #    @request.session[:cart_id] = @cart.id
     get :show, {:id => 666}, session.merge(:cart_id => @cart.id)
-    assert_redirected_to store_path
+    assert_redirected_to store_url
 
     # session[] にカート id が入っていなくても、params[] で指定されてい
     # れば、カートのページを表示させる。

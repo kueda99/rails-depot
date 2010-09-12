@@ -26,7 +26,7 @@ class ProductsControllerTest < ActionController::TestCase
       post :create, :product => attributes
     end
 
-    assert_redirected_to product_path(assigns(:product))
+    assert_redirected_to product_url(assigns(:product))
   end
 
   test "should show product" do
@@ -41,7 +41,7 @@ class ProductsControllerTest < ActionController::TestCase
 
   test "should update product" do
     put :update, :id => @product.to_param, :product => @product.attributes
-    assert_redirected_to product_path(assigns(:product))
+    assert_redirected_to product_url(assigns(:product))
   end
 
   test "should destroy product which is not associated with any line items" do
@@ -49,7 +49,7 @@ class ProductsControllerTest < ActionController::TestCase
       delete :destroy, :id => @product_not_in_any_cart.to_param
     end
 
-    assert_redirected_to products_path
+    assert_redirected_to products_url
   end
 
   test "should not destroy product which is associated with any line items" do
@@ -57,7 +57,7 @@ class ProductsControllerTest < ActionController::TestCase
       delete :destroy, :id => @product.to_param
     end
 
-    assert_redirected_to products_path
+    assert_redirected_to products_url
   end
 
   test "should get index having proper layout" do

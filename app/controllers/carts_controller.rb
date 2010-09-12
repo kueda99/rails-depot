@@ -8,7 +8,7 @@ class CartsController < ApplicationController
   def index
     # 管理者でなければ、:show アクションにリダイレクトする
     if session[:user_id].nil?
-      redirect_to cart_path(current_cart.id), :notice => 'Indexing carts not allowed'
+      redirect_to cart_url(current_cart.id), :notice => 'Indexing carts not allowed'
       return
     end
 
@@ -110,7 +110,7 @@ class CartsController < ApplicationController
     return true unless session[:user_id].nil?
 
     if params[:id] && (params[:id].to_param.to_i != current_cart.id)
-      redirect_to store_path,
+      redirect_to store_url,
       :notice => "Operation denied because the cart of id #{params[:id]} is not yours"
     end
   end
