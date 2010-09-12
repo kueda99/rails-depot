@@ -17,8 +17,8 @@
       <%= @page_title || "Pragmatic Bookshelf" %><!-- <label id="code.depot.e.title"/> -->
     </div>
 
-    <div id="columns" class="<%= session[:user_id].nil? ? %(customer) : %(admin) %>">
-      <div id="side" class="<%= session[:user_id].nil? ? %(customer) : %(admin) %>">
+    <div id="columns" class="<%= admin_or_customer %>">
+      <div id="side" class="<%= admin_or_customer %>">
         <a href="http://www....">Home</a><br />
         <a href="http://www..../faq">Questions</a><br />
         <a href="http://www..../news">News</a><br />
