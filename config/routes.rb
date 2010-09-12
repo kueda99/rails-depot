@@ -1,4 +1,7 @@
 Depot::Application.routes.draw do
+  get "sessions/switch_to_customer"
+  get "sessions/switch_to_admin"
+
   resources :line_items
 
   resources :carts do

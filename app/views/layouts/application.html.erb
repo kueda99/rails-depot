@@ -17,12 +17,18 @@
       <%= @page_title || "Pragmatic Bookshelf" %><!-- <label id="code.depot.e.title"/> -->
     </div>
 
-    <div id="columns">
-      <div id="side">
+    <div id="columns" class="<%= session[:user_id].nil? ? %(customer) : %(admin) %>">
+      <div id="side" class="<%= session[:user_id].nil? ? %(customer) : %(admin) %>">
         <a href="http://www....">Home</a><br />
         <a href="http://www..../faq">Questions</a><br />
         <a href="http://www..../news">News</a><br />
         <a href="http://www..../contact">Contact</a><br />
+        <br />
+        <% if session[:user_id].nil? %>
+        <%= link_to 'Switch to Admin', sessions_switch_to_admin_path, :from => request.url %>
+        <% else %>
+        <%= link_to 'Switch to Customer', sessions_switch_to_customer_path, :from => request.url %>
+        <% end %>
       </div>
 
       <div id="main">

@@ -81,9 +81,14 @@
   float: left;
 }
 
-#columns {
+#columns.customer {
   background: #141;
 }
+
+#columns.admin {
+  background: #660000;
+}
+
 
 #main {
   margin-left: 13em;
@@ -98,7 +103,14 @@
   padding-left: 1em;
   padding-bottom: 1em;
   width: 12em;
+}
+
+#side.customer {
   background: #141;
+}
+
+#side.admin {
+  background: #660000;
 }
 
 #side a {
