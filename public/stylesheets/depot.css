@@ -178,7 +178,7 @@
   text-align: center;
 }
 
-#cart .line_item_subtotal {
+#cart .item_price {
   padding-left: 1em;
   padding-right: 1em;
   text-align: right

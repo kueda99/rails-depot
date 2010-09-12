@@ -1,5 +1,7 @@
 <p id="notice"><%= notice %></p>
 
+<div class="cart_title">Your Cart</div>
+
 <table id="cart">
   <tr>
     <th class="line_item_title">Title</th>
@@ -11,16 +13,21 @@
   </tr>
 
 <% @line_items.each do |item| %>
-  <tr>
+  <tr class="item_entry">
     <td class="line_item_title"><%= item.product.title %></td>
     <td class="line_item_quantity"><%= item.quantity || 'N/A' %></td>
-    <td class="line_item_subtotal">
-      <%= item.quantity.nil? ? 'N/A' : number_to_currency(item.quantity * item.product.price) %></td>
+    <td class="item_price">
+      <%= item.quantity.nil? ? 'N/A' : number_to_currency(item.total_price) %></td>
     <td><%= link_to 'Edit', edit_cart_line_item_path(@cart, item) %></td>
     <td><%= link_to 'Destroy', cart_line_item_path(@cart, item),
                 :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
+
+  <tr class="total_line">
+    <td colspan="2">Total</td>
+    <td class="total_cell"><%= number_to_currency(@cart.total_price) %></td>
+  </tr>
 </table>
 
 <br />

@@ -42,8 +42,10 @@ class CartsControllerTest < ActionController::TestCase
     @request.session[:cart_id] = @cart.to_param
     get :show, :id => @cart.to_param
     assert_response :success
-    # カートに入っているラインアイテムの個数 + ヘッダ
-    assert_select 'table > tr', @cart.line_items.count + 1
+    # カートに入っているラインアイテムの個数
+    assert_select 'tr.item_entry', @cart.line_items.count
+    assert_select 'td.item_price', @cart.line_items.count
+    assert_select 'tr.total_line', 1
   end
 
   test "should get edit" do
