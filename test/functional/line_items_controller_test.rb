@@ -26,7 +26,17 @@ class LineItemsControllerTest < ActionController::TestCase
     assert_select "tr", 3    # テーブルのヘッダ (1) + フィクスチャーの個数 (2)
   end
 
-  # 管理者モードではすべての顧客がカートに入れている製品がリストされる
+  # 顧客モードでは、ラインアイテムがカートの下位にネストされている場合、
+  # 自分のカートに入っている製品しかリストされない
+  test "should get index of scoped line items" do
+    get :index, :cart_id => @cart
+    assert_response :success
+    assert_not_nil assigns(:line_items)
+    assert_select "tr", 3    # テーブルのヘッダ (1) + フィクスチャーの個数 (2)
+  end
+
+  # 管理者モードでは、ラインアイテムがカートの下位にネストされていない
+  # 場合、すべての顧客がカートに入れている製品がリストされる
   test "should get index in admin mode" do
     get :index, nil, {:user_id => 1234}
     assert_response :success
@@ -34,6 +44,13 @@ class LineItemsControllerTest < ActionController::TestCase
     assert_select "tr", 4
   end
 
+  # 管理者モードでは、ラインアイテムがカートの下位にネストがされている
+  # 場合、そのカートに入っている製品がリストされる
+  test "should get index of scoped line items in admni mode" do
+    get :index, {:cart_id => @cart}, {:user_id => 1234}
+    assert_response :success
+    assert_select "tr", 3
+  end
 
   test "should get new" do
     get :new

@@ -8,7 +8,11 @@ class LineItemsController < ApplicationController
   # GET /line_items.xml
   def index
 
-    @line_items = (session[:user_id].nil? ? current_cart.line_items : LineItem.all)
+    if @nested
+      @line_items = Cart.find(params[:cart_id]).line_items
+    else
+      @line_items = (session[:user_id].nil? ? current_cart.line_items : LineItem.all)
+    end
 
     respond_to do |format|
       format.html # index.html.erb
@@ -134,7 +138,7 @@ class LineItemsController < ApplicationController
     # い) は、データベース上のカートの内容を自由に閲覧することができる
     return true unless session[:user_id].nil?
 
-    if params[:cart_id] && (params[:cart_id].to_i != current_cart.id)
+    if params[:cart_id] && (params[:cart_id].to_param.to_i != current_cart.id)
       redirect_to store_path,
       :notice => %{何を考えてんだよ !! (カート ID は #{current_cart.id} だけど、params は #{params[:cart_id]} だよ)}
     end
