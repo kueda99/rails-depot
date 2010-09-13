@@ -78,6 +78,7 @@ class LineItemsController < ApplicationController
   # PUT /line_items/1
   # PUT /line_items/1.xml
   def update
+    @cart = current_cart
     @line_item = LineItem.find(params[:id], :conditions => ['cart_id = ?', current_cart.id])
 
     respond_to do |format|

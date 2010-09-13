@@ -153,6 +153,17 @@ class LineItemsControllerTest < ActionController::TestCase
     end
   end
 
+  # ラインアイテムについて、quantity が数字以外のものが入れられ
+  # :update した場合、edit 画面に転送されることを確認する。
+  test "should render edit if updated with bad value for quantity" do
+    attributes = @line_item.attributes.update("quantity" => "666x")
+    put :update, :id => @line_item.to_param, :line_item => attributes
+    assert_response :success
+    assert_template :edit, "should render edit template, given bad value for quantity"
+    assert_select "#error_explanation li", 'Quantity is not a number'
+  end
+
+
 
   # ラインアイテムについて :destroy した場合、もし自分のカートに入って
   # いる場合は情報を表示する。そうでないときは「そんなもの存在していな
