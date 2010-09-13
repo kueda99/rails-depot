@@ -183,3 +183,25 @@
   padding-right: 1em;
   text-align: right
 }
+
+
+/* Styles for the cart in the main page */
+
+#store .cart_title {
+  font: 120% bold;
+}
+
+#store .total_line {
+  text-align: right;
+}
+
+#store .item_price {
+  text-align: right;
+}
+
+#store .total_line .total_cell {
+  padding-left: 1em;
+  padding-right: 1em;
+  font-weight: bold;
+  border-top: 1px solid #595;
+}
