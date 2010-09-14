@@ -15,6 +15,10 @@ class ApplicationController < ActionController::Base
     cart
   end
 
+  def set_cart
+    @cart = current_cart
+  end
+
   # 管理者かどうかを返すメソッド。コントローラで session の中身を直接参
   # 照しないようにするため。
   def admin?
