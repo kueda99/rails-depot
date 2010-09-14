@@ -3,8 +3,8 @@
 #store #notice {
         color: #000;
         border: 2px solid red;
-        padding: 1em;
-        margin-bottom: 2em;
+/*         padding: 1em; */
+/*         margin-bottom: 2em; */
         background-color: #f0f0f0;
         font: bold smaller sans-serif;
 }
@@ -14,7 +14,7 @@
         font:  150% sans-serif;
         color: #226;
         border-bottom: 3px dotted #77d;
-        margin-bottom: 30px;
+/*         margin-bottom: 30px; */
 }
 
 /* Styles for products/index */
@@ -24,16 +24,16 @@
 }
 
 #product_list table tr td {
-        padding: 5px;
+/*         padding: 5px; */
         vertical-align: top;
 }
 
 #product_list .list_image {
-  max-height:       80px;
+/*   max-height:       80px; */
 }
 
 #product_list .list_description {
-  width:        60%;
+/*   width:        60%; */
 }
 
 #product_list .list_description dl {
@@ -53,7 +53,7 @@
 #product_list .list_actions {
   font-size:    x-small;
   text-align:   right;
-  padding-left: 1em;
+/*   padding-left: 1em; */
 }
 
 #product_list .list_line_even {
@@ -65,23 +65,24 @@
 }
 
 #product_show .image_view {
-  margin-left: 50px;
-  padding: 5px;
-  max-width: 100px;
+/*   margin-left: 50px; */
+/*   padding: 5px; */
+/*   max-width: 100px; */
   background: #e0e0e0;
 }
 
 #product_list .list_description .title {
-  margin-top: 5px;
-  margin-bottom: 5px;
+/*   margin-top: 5px; */
+/*   margin-bottom: 5px; */
 }
 
 #product_list .list_description .description {
-  margin: 3px;
-  margin-left: 10px;
+/*   margin: 3px; */
+/*   margin-left: 10px; */
 }
 
 /* START:mainlayout */
+
 /* Styles for main page */
 
 #banner {
@@ -108,26 +109,42 @@
 
 
 #main {
-  margin-left: 13em;
+  margin-left: 22em;
+  /* also change width of #side */
+
   padding-top: 4ex;
   padding-left: 2em;
+  padding-right: 2em;
   background: white;
 }
 
 #side {
   float: left;
-  padding-top: 1em;
-  padding-left: 1em;
-  padding-bottom: 1em;
-  width: 12em;
+  padding: 1em;
+  width: 20em;
+  /* also change margin-left of #main */
 }
 
+
+/* Background colors for the modes */
 #side.customer {
   background: #141;
 }
 
 #side.admin {
   background: #660000;
+}
+/* end of background colors */
+
+
+#side .cart_title {
+  color: #bfb;
+}
+
+#side #cart_in_side_bar {
+  padding-top: 1ex;
+  padding-bottom: 5ex;
+  color: #bfb;
 }
 
 #side a {
@@ -140,41 +157,39 @@
 
 #store  .entry {
   overflow: auto;
-  margin-top: 1em;
+  margin-top: 1ex;
   border-bottom: 1px dotted #77d;
-  margin-left: 20px;
+/*   margin-left: 20px; */
 }
 
 #store .entry img {
-  width: 80px;
-  margin-right: 20px;
-  margin-left: 10px;
-  margin-bottom: 5px;
   float: left;
+  width: 8em;
+  padding: 1ex;
+  margin: 1ex;
+  margin-right: 1em;
+  background-color: #e0e0e0;
 }
 
 #store .entry .title {
   font-size: 120%;
   font-family: sans-serif;
-  margin: 10px;
-  margin-top: 0;
-  margin-bottom: 2px;
-  padding-left: 0px;
+  padding-left: 10px;
   color: #227;
 }
 
-#store .description {
-  margin: 20px;
+#store .entry .description {
+  padding-left: 10px;
 }
 
 #store .entry p {
- margin-top: 0.5em;
- margin-bottom: 0.8em;
+/*  margin-top: 0.5em; */
+/*  margin-bottom: 0.8em; */
 }
 
 #store .entry .price_line {
- clear: both;
- margin-bottom: 0.5em;
+  clear: both;    /* 価格が画像の下に表示される */
+  margin-bottom: 1em;
 }
 
 #store .entry .add_to_cart {
@@ -189,19 +204,19 @@
 
 
 #cart .line_item_title {
-  width: 20em;
+/*   width: 20em; */
   text-align: left;
 }
 
 #cart .line_item_quantity {
-  padding-left: 1em;
-  padding-right: 1em;
+/*   padding-left: 1em; */
+/*   padding-right: 1em; */
   text-align: center;
 }
 
 #cart .item_price {
-  padding-left: 1em;
-  padding-right: 1em;
+/*   padding-left: 1em; */
+/*   padding-right: 1em; */
   text-align: right
 }
 
@@ -221,8 +236,8 @@
 }
 
 #store .total_line .total_cell {
-  padding-left: 1em;
-  padding-right: 1em;
+/*   padding-left: 1em; */
+/*   padding-right: 1em; */
   font-weight: bold;
   border-top: 1px solid #595;
 }
