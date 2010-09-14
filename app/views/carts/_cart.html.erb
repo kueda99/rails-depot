@@ -1,12 +1,9 @@
-<div id="cart_in_side_bar">
-  <div class="cart_title">Your Cart</div>
+<div class="cart_title">Your Cart</div>
 
-  <table id="cart">
-    <%= render :partial => "carts/line_item", :collection => @cart.line_items %>
-
-    <tr class="total_line">
-      <td colspan="1">Total</td>
-      <td class="total_cell"><%= number_to_currency(@cart.total_price) %></td>
-    </tr>
-  </table>
-</div>
+<table>
+  <%= render :partial => "carts/line_item", :collection => cart.line_items %>
+  <tr class="total_line">
+    <td colspan="1">Total</td>
+    <td class="total_cell"><%= number_to_currency(cart.total_price) %></td>
+  </tr>
+</table>
