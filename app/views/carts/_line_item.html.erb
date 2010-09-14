@@ -1,0 +1,9 @@
+<tr class="item_entry">
+  <td class="line_item_title"><%= line_item.product.title %></td>
+  <td class="line_item_quantity"><%= line_item.quantity || 'N/A' %></td>
+  <td class="item_price">
+    <%= line_item.quantity.nil? ? 'N/A' : number_to_currency(line_item.total_price) %></td>
+  <td><%= link_to 'Edit', edit_cart_line_item_path(line_item.cart, line_item) %></td>
+  <td><%= link_to 'Destroy', cart_line_item_path(line_item.cart, line_item),
+          :confirm => 'Are you sure?', :method => :delete %></td>
+</tr>

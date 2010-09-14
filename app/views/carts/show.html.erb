@@ -12,17 +12,7 @@
     <th></th>
   </tr>
 
-<% @line_items.each do |item| %>
-  <tr class="item_entry">
-    <td class="line_item_title"><%= item.product.title %></td>
-    <td class="line_item_quantity"><%= item.quantity || 'N/A' %></td>
-    <td class="item_price">
-      <%= item.quantity.nil? ? 'N/A' : number_to_currency(item.total_price) %></td>
-    <td><%= link_to 'Edit', edit_cart_line_item_path(@cart, item) %></td>
-    <td><%= link_to 'Destroy', cart_line_item_path(@cart, item),
-                :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+  <%= render :partial => "line_item", :collection => @line_items %>
 
   <tr class="total_line">
     <td colspan="2">Total</td>
