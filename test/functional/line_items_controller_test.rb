@@ -23,7 +23,7 @@ class LineItemsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:line_items)
-    assert_select "tr", 3    # テーブルのヘッダ (1) + フィクスチャーの個数 (2)
+    assert_select "#main tr", 3    # テーブルのヘッダ (1) + フィクスチャーの個数 (2)
   end
 
   # 顧客モードでは、ラインアイテムがカートの下位にネストされている場合、
@@ -32,7 +32,7 @@ class LineItemsControllerTest < ActionController::TestCase
     get :index, :cart_id => @cart
     assert_response :success
     assert_not_nil assigns(:line_items)
-    assert_select "tr", 3    # テーブルのヘッダ (1) + フィクスチャーの個数 (2)
+    assert_select "#main tr", 3    # テーブルのヘッダ (1) + フィクスチャーの個数 (2)
   end
 
   # 管理者モードでは、ラインアイテムがカートの下位にネストされていない
@@ -88,7 +88,7 @@ class LineItemsControllerTest < ActionController::TestCase
     # ちゃんとカートの中に入ったかの確認
     assert_equal cart_items_count + 1, @cart.line_items.count
     assert_equal product_items_count + 1, products(:ruby).line_items.count
-    assert_redirected_to cart_url(@cart)
+    assert_redirected_to store_url
   end
 
 
