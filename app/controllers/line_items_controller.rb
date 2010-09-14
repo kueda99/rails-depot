@@ -2,7 +2,7 @@
 class LineItemsController < ApplicationController
 
   # URL がネストされていれば、@nested を true にする
-  before_filter :cart_id_discrepancy, :check_nested
+  before_filter :cart_id_discrepancy, :check_nested, :set_cart
 
   # GET /line_items
   # GET /line_items.xml
@@ -23,7 +23,6 @@ class LineItemsController < ApplicationController
   # GET /line_items/1
   # GET /line_items/1.xml
   def show
-    @cart = current_cart
     @line_item = @cart.line_items.find(params[:id])
     respond_to do |format|
       format.html # show.html.erb
@@ -54,14 +53,12 @@ class LineItemsController < ApplicationController
 
   # GET /line_items/1/edit
   def edit
-    @cart = current_cart
     @line_item = @cart.line_items.find(params[:id])
   end
 
   # POST /line_items
   # POST /line_items.xml
   def create
-    @cart = current_cart
     @line_item = @cart.add_product(params[:product_id])
 
     respond_to do |format|
@@ -78,7 +75,6 @@ class LineItemsController < ApplicationController
   # PUT /line_items/1
   # PUT /line_items/1.xml
   def update
-    @cart = current_cart
     @line_item = LineItem.find(params[:id], :conditions => ['cart_id = ?', current_cart.id])
 
     respond_to do |format|
