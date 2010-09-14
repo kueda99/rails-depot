@@ -1,1 +1,1 @@
-page.replace_html('cart', render(@cart))
+page.replace_html('cart_in_side_bar', render(@cart))

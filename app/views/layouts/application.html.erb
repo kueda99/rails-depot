@@ -26,11 +26,11 @@
         <br />
         <% if session[:user_id].nil? %>
         <% unless (@cart.nil? || @cart.id.nil?) %>
-        <%= render :partial => "carts/cart" %>
+        <div id="cart_in_side_bar">
+          <%= render @cart %>
+        </div>
         <%= link_to 'Edit your cart', cart_path(@cart.id) %>
-        <br />
-        <br />
-        <br />
+        <br /><br /><br />
         <% end %>
         <%= link_to 'Switch to Admin', sessions_switch_to_admin_path, :from => request.url %>
         <% else %>
