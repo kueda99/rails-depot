@@ -15,7 +15,7 @@ class ProductTest < ActiveSupport::TestCase
     product = Product.new
     assert product.invalid?, "product with blank attributes should be invalid"
 
-    [:title, :description, :image_url].each do |attribute|
+    [:title, :description].each do |attribute|
       assert product.errors[attribute].include?("can't be blank"),
       %{#{attribute} of product should not be blank}
     end
@@ -42,12 +42,12 @@ class ProductTest < ActiveSupport::TestCase
   test "image_url without a proper extension invalid" do
     good = %w{hello.gif hello.GIF hello.jpg hello.JPG hello.png hello.PNG}
     good.each do |url|
-      assert new_product(url).valid?, %{URL with a proper extension ('#{url}') should be valid}
+      assert new_product("dummies/#{url}").valid?, %{URL with a proper extension ('#{url}') should be valid}
     end
 
     bad_url = ['hello.pdf']
     bad_url.each do |url|
-      assert new_product(url).invalid?, %{URL with an improper extension ('#{url}') should not be valid}
+      assert new_product("dummies/#{url}").invalid?, %{URL with an improper extension ('#{url}') should not be valid}
     end
   end
 
@@ -86,6 +86,17 @@ class ProductTest < ActiveSupport::TestCase
       @product_not_in_any_cart.destroy
     end
     assert !@product_not_in_any_cart.errors[:base].include?("Line items present")
+  end
+
+
+  # イメージに関するテスト
+  test "image_url should be nil or pointing an existing file" do
+    assert @product.valid?, "product with existing image url should be valid"
+    assert_empty @product.errors[:image_url]
+
+    @product.image_url = "foo/bar.jpg"
+    assert !@product.valid?, "product with non-existing image url should be invalid"
+    assert_equal 'is not an existing path', @product.errors[:image_url].join('; ')
   end
 
 

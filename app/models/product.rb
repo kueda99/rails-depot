@@ -19,7 +19,19 @@ class Product < ActiveRecord::Base
     end
   end
 
-  validates :title, :description, :image_url, :presence => true
+  validates :title, :description, :presence => true
+
+  validate do |product|
+    product.has_valid_image_path_or_nil
+  end
+
+  def has_valid_image_path_or_nil
+    return true if image_url.nil?
+    unless File.exist?(File.join(Rails::public_path, 'images', image_url))
+      errors.add(:image_url, "is not an existing path")
+    end
+  end
+
   validates :price, :numericality => { :greater_than_or_equal_to => 0.01 }
   validates :title, :uniqueness => true
 
