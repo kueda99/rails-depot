@@ -11,8 +11,8 @@
       </td>
       <td class="list_description">
         <dl>
-          <dt><%= product.title %></dt>
-          <dd><%= truncate(strip_tags(product.description), :length => 80) %></dd>
+          <dt class="title"><%= product.title %></dt>
+          <dd class="description"><%= truncate(strip_tags(product.description), :length => 80) %></dd>
           <% # truncate() は指定した長さに行を削る %>
           <% # strip_tags() は HTML タグを取り除く %>
         </dl>
