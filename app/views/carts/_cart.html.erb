@@ -1,0 +1,24 @@
+<div class="cart_title">Your Cart</div>
+
+<table id="cart">
+  <tr>
+    <th class="line_item_title">Title</th>
+    <th class="line_item_quantity">Quantity</th>
+    <th class="line_item_subtotal">Subtotal</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+  <%= render :partial => "line_item", :collection => cart.line_items %>
+
+  <tr class="total_line">
+    <td colspan="2">Total</td>
+    <td class="total_cell"><%= number_to_currency(cart.total_price) %></td>
+  </tr>
+</table>
+
+<br />
+
+<%= button_to 'Empty cart', cart, :method => :delete, :confirm =>
+'Are you sure?' %>
