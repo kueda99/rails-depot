@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 class SessionsControllerTest < ActionController::TestCase
@@ -16,5 +17,4 @@ class SessionsControllerTest < ActionController::TestCase
     get :switch_to_admin
     assert_not_nil @request.session[:user_id]
   end
-
 end

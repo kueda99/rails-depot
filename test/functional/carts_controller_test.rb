@@ -191,4 +191,33 @@ class CartsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  #
+  # 管理者モードか顧客モードかによって layouts/application.html.erb の
+  # 内容が変わることを確認する
+  #
+  test "columns tag should have the value of class which depends on the mode" do
+    # 管理者モードでアクセス
+    get :index, nil, {:user_id => 1234}
+    assert_response :success
+    assert_select "#columns[class=?]", 'admin'
+    assert_select "#side[class=?]", 'admin'
+
+    # 顧客モードでアクセス
+    get :show, {:id => @cart.id}, {:user_id => nil, :cart_id => @cart.id}
+    assert_response :success
+    assert_select "#columns[class=?]", 'customer'
+    assert_select "#side[class=?]", 'customer'
+  end
+
+  test "should be able to switch between admin and customer mode" do
+    # 管理者モードでアクセス
+    get :index, nil, {:user_id => 1234}
+    assert_response :success
+    assert_select "#side a[href=?]", '/sessions/switch_to_customer'
+
+    # 顧客モードでアクセス
+    get :show, {:id => @cart.id}, {:user_id => nil, :cart_id => @cart.id}
+    assert_response :success
+    assert_select "#side a[href=?]", '/sessions/switch_to_admin'
+  end
 end
