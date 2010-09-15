@@ -26,9 +26,9 @@
         <br />
         <% if session[:user_id].nil? %>
         <% unless (@cart.nil? || @cart.id.nil?) %>
-        <div id="cart_in_side_bar">
-          <%= render @cart %>
-        </div>
+        <%= hidden_div_if(@cart.line_items.empty?, :id => "cart_in_side_bar") do %>
+        <%= render @cart %>
+        <% end %>
         <%= link_to 'Edit your cart', cart_path(@cart.id) %>
         <br /><br /><br />
         <% end %>

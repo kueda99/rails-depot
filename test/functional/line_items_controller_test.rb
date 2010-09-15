@@ -258,4 +258,24 @@ class LineItemsControllerTest < ActionController::TestCase
     assert_response :success
     assert_select "#side a[href=?]", '/sessions/switch_to_admin'
   end
+
+
+  #
+  # カートの中のラインアイテムの数量によって layout/application.html に
+  # てカートが表示されたり、されなかったりするのを確かめるテストケース
+  #
+  test "should not show table for empty cart" do
+    # まずは空のカートを準備する
+    cart = Cart.new
+    assert_equal 0, cart.total_items
+    assert cart.save
+
+    get :index, {}, :cart_id => cart.id
+    assert_select '#cart_in_side_bar[style="display: none"]', true
+
+    assert_difference('LineItem.count') do
+      post :create, :product_id => products(:one).id
+    end
+    assert_select '#cart_in_side_bar[style="display: none"]', false
+  end
 end
