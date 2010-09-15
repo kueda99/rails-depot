@@ -59,4 +59,15 @@ class StoreControllerTest < ActionController::TestCase
     assert_response :success
     assert_select "#side a[href=?]", '/sessions/switch_to_admin'
   end
+
+
+  #
+  # サイドバーに表示されるカートのテーブルがフォーマットに従っているかのチェック
+  #
+  test "should have a specific structure" do
+    get :index
+    assert_response :success
+    assert_select "div#cart_in_side_bar > div.cart_title", true
+    assert_select "div#cart_in_side_bar > table", true
+  end
 end
