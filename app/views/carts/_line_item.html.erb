@@ -1,4 +1,8 @@
+<% if line_item == @current_item %>
+<tr id="current_item">
+<% else %>
 <tr class="item_entry">
+<% end %>
   <td class="line_item_title"><%= %{#{line_item.quantity || 'N/A'} x #{line_item.product.title}}%></td>
   <td class="item_price">
     <%= line_item.quantity.nil? ? 'N/A' : number_to_currency(line_item.total_price) %></td>
