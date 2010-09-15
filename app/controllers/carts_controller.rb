@@ -94,7 +94,7 @@ class CartsController < ApplicationController
     session[:cart_id] = nil
 
     respond_to do |format|
-      format.html { redirect_to(carts_url,
+      format.html { redirect_to(admin? ? carts_url : store_url,
                                 :notice => admin? ? "Cart of id #{@cart.id} successfully deleted" : "Your cart is currently empty") }
       format.xml  { head :ok }
     end

@@ -92,7 +92,7 @@ class CartsControllerTest < ActionController::TestCase
       end
     end
 
-    assert_redirected_to carts_url
+    assert_redirected_to store_url
     assert_equal "Your cart is currently empty", flash[:notice]
   end
 
