@@ -24,4 +24,9 @@ class Cart < ActiveRecord::Base
   def total_price
     line_items.inject(0) { |result, item| result += item.total_price }
   end
+
+  # カートに入っている製品すべての数量を返す
+  def total_items
+    line_items.map(&:quantity).sum
+  end
 end

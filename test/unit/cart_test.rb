@@ -54,4 +54,15 @@ class CartTest < ActiveSupport::TestCase
     cart.line_items.first.quantity += 1
     assert_equal 29.97, cart.total_price
   end
+
+  test "#total_items should return number of items in it" do
+    assert_equal 2, carts(:cart_with_two_items).total_items
+
+    cart = Cart.new
+    assert_equal 0, cart.total_items
+
+    cart.line_items.build(:product => products(:one))
+    assert_equal 1, cart.total_items
+  end
+
 end
