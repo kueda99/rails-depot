@@ -92,6 +92,24 @@ class LineItemsControllerTest < ActionController::TestCase
   end
 
 
+  #
+  # ajax でラインアイテムの追加が行えるか確認するテスト
+  #
+  #   テストの中で、id が 'current_item' である html 要素を確認している。
+  #   この要素は ajax のみが生成するので、これによって ajax がちゃんと
+  #   機能しているか確かめることができる。
+  #
+  test "should create line_item via ajax" do
+    assert_select '#current_item', false    # 元々ないことを確認
+
+    assert_difference('LineItem.count') do
+      xhr :post, :create, :product_id => products(:ruby).id
+    end
+    assert_response :success
+    assert_select '#current_item', /Programming Ruby 1.9/
+  end
+
+
   test "should show line_item" do
     get :show, :id => @line_item.to_param
     assert_response :success
