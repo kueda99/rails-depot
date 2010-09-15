@@ -4,6 +4,6 @@
   <%= render :partial => "carts/line_item", :collection => cart.line_items %>
   <tr class="total_line">
     <td colspan="1">Total</td>
-    <td class="total_cell"><%= number_to_currency(cart.total_price) %></td>
+    <td id="total_cell"><%= number_to_currency(cart.total_price) %></td>
   </tr>
 </table>
